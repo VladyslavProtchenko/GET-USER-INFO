@@ -9,7 +9,7 @@ const DB = {
 		{ id: '2', name: 'js' },
 		{ id: '3', name: 'nodejs' },
 		{ id: '4', name: 'react' },
-		{ id: '4', name: 'TypeScript' },
+		{ id: '5', name: 'TypeScript' },
 	],
 	users: [
 		{
@@ -20,8 +20,8 @@ const DB = {
 		},
 
 		{
-			id: '2',
-			levelId: '1',
+			id: '3',
+			levelId: '2',
 			name: 'Oleg',
 			skills: ['1', '2'],
 		},
@@ -29,41 +29,34 @@ const DB = {
 }
 
 const findUserById = (id) => {
-	if(!DB.users[id-1]) return '"Not Found"';
 
-    const user = {};
+	const user = DB.users.find(el => el.id ===id);
+	if(!user) return 'user not exist';
 
-    user.name = DB.users[id-1].name;
-    let levelId = DB.users[id-1].levelId;
-    let skills = DB.users[id-1].skills;
+		DB.levels.filter(item => {
+		if(item.id === user.levelId) {
+			user.position = item.name;
+			delete user.levelId;
+		}
+	})
+	
+	user.skills = user.skills.map(item => {
 
+		skill = DB.skills.find(skill => skill.id === item )
+		if(!skill) {return}
 
+		return skill.name
+	})
 
-    DB.levels.forEach(item=>{
-
-        if(item.id == levelId) {
-            user.position = item.name;
-        }
-
-    })
-
-
-    user.skills = [];
-    skills.forEach(item=>{
-
-        DB.skills.forEach(skill=>{
-            if(skill.id == item ){user.skills.push(skill.name)};
-        })    
-    })
-    
-    return user;
+	return user;
 }
 
 
 
 
-const oleg = findUserById('2')
-console.log(oleg)
+
+// const oleg = findUserById('2')
+// console.log(oleg)
 /*
 {
 	name: 'Oleg',
@@ -72,8 +65,8 @@ console.log(oleg)
 }
 */
 
-const andriy = findUserById('1')
-console.log(andriy)
+// const andriy = findUserById('1')
+// console.log(andriy)
 /*
 {
     name: 'Andriy Petrash',
@@ -82,8 +75,9 @@ console.log(andriy)
 }
 */
 
-const notFoundUser = findUserById('33')
+const notFoundUser = findUserById('2')
 console.log(notFoundUser)
 // /*
 // "Not Found"
 // */
+
